@@ -4,7 +4,23 @@ import { db } from "./lib/db";
 import { getUserById } from "./modules/auth/actions";
 import authConfig from "./auth.config";
 
+// Create a custom adapter that extends PrismaAdapter
+const customPrismaAdapter = {
+  ...PrismaAdapter(db),
+  // Override the createUser function to ensure we use our own ID format
+  async createUser(data) {
+    // Use Prisma directly to create the user with CUID
+    return db.user.create({
+      data
+    });
+  }
+};
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
+  adapter: customPrismaAdapter,
+  session: { strategy: "jwt" },
+
   callbacks: {
     async signIn({ user, account }) {
       if (!user || !account) return false;
@@ -20,7 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             name: user.name,
             image: user.image,
             accounts: {
-                // @ts-ignore
+              // @ts-ignore
               create: {
                 type: account.type,
                 provider: account.provider,
@@ -61,7 +77,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               tokenType: account.token_type,
               scope: account.scope,
               idToken: account.id_token,
-            //   @ts-ignore
+              //   @ts-ignore
               sessionState: account.session_state,
             },
           });
@@ -70,29 +86,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true;
     },
 
-    async jwt(params) {
-      const token = params.token;
-      if (!token.sub) return token;
+    // jwt gets called when issuing/updating the token
+    async jwt({ token, user }) {
+      // Always fetch the user from the database to ensure we have the CUID
+      if (token.email) {
+        const dbUser = await db.user.findUnique({
+          where: { email: token.email as string }
+        });
+        
+        if (dbUser) {
+          // Use the database CUID as the subject
+          token.sub = dbUser.id;
+        }
+      }
 
-      const existingUser = await getUserById(token.sub);
-      if (!existingUser) return token;
-
-      token.name = existingUser.name;
-      token.email = existingUser.email;
-      token.userPosition = existingUser.userPosition;
-
+      // Optionally persist name/email on the token for easy access
+      if (user) {
+        token.name = (user as any).name ?? token.name;
+        token.email = (user as any).email ?? token.email;
+      }
+      
+      console.log('JWT callback - token.sub:', token.sub, 'user?.id:', user?.id);
       return token;
     },
 
-    async session(params) {
-      if (params.session.user && params.token.sub) {
-        params.session.user.id = params.token.sub;
-        // @ts-ignore
-        params.session.user.userPosition = params.token.userPosition;
+    // session is called when returning the session object to the client
+    async session({ session, token }) {
+      if (session.user && token.sub) {
+        // token.sub should now be the Prisma user id (CUID)
+        session.user.id = token.sub as string;
       }
-      return params.session;
+      console.log('SESSION callback - token.sub:', token.sub);
+      return session;
     },
-  },
-  session: { strategy: "jwt" },
-  ...authConfig,
+  }
 });

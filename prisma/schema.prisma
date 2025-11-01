@@ -51,5 +51,7 @@ model Chat {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   question   String   // user input
   answer     String   // AI response
+  zone String?
+  score Int?
   createdAt  DateTime @default(now())
 }

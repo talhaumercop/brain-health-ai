@@ -37,7 +37,7 @@ export default function Sidebar() {
     { name: 'Chat', icon: ChatBubbleOvalLeftEllipsisIcon, path: `/dashboard/${userId}/chat` },
     { name: 'History', icon: ClockIcon, path: `/dashboard/${userId}/history` },
     { name: 'Personalization', icon: Cog6ToothIcon, path: `/dashboard/${userId}/personalization` },
-    { name: 'About', icon: IconDeviceVisionProFilled, path: `/dashboard/${userId}/about` },
+    // { name: 'About', icon: IconDeviceVisionProFilled, path: `/dashboard/${userId}/about` },
     { name: 'Brain', icon: BrainIcon, path: `/dashboard/${userId}/brain` },
   ];
 

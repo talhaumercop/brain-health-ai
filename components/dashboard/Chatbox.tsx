@@ -63,10 +63,12 @@ export default function ChatBox({ userId }: ChatBoxProps) {
             const res = await fetch('/api/ai', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: question, userId }),
+                body: JSON.stringify({ text: question, userId:userId }),
             });
 
+            
             const data = await res.json();
+            console.log(data)
             if (res.ok && data?.rewritten) {
                 setResponse({ question, answer: data.rewritten });
             } else {
