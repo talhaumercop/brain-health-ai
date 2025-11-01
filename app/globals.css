@@ -1,0 +1,70 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+body{
+    margin: 0; padding: 0; box-sizing: border-box;
+}
+.join-btn .char {
+width: 22px; height: 22px; border-radius: 6px; display:inline-grid; place-items:center;
+background: rgba(255,255,255,0.06); font-weight:800; transform: translateY(0);
+transition: all .28s cubic-bezier(.2,.9,.3,1);
+}
+
+
+.join-btn:hover .char { transform: translateY(-6px) rotate(-6deg); box-shadow: 0 6px 18px rgba(5,140,66,0.14); }
+
+
+/* circular rotating text button */
+.awesome-root { position: relative; display:inline-flex; align-items:center; justify-content:center; }
+.circular {
+--size: 96px;
+width: var(--size); height: var(--size); border-radius: 9999px;
+display:grid; place-items:center; position:relative; cursor:pointer; user-select:none;
+transition: transform .25s ease, box-shadow .25s ease;
+}
+.circular .ring {
+position:absolute; inset:0; border-radius:9999px;
+background: conic-gradient(from 0deg, #058C42, #16DB65, #04471C, #058C42);
+filter: blur(6px); opacity:.85; z-index:-1;
+}
+
+
+.circular .label { font-weight:700; font-size:.875rem; }
+
+
+@keyframes rotate-text {
+0%{ transform: rotate(0deg) }
+100%{ transform: rotate(360deg) }
+}
+
+
+.circular .rotor {
+position:absolute; inset:0; display:grid; place-items:center; pointer-events:none;
+}
+.circular .rotor svg { transform-origin:center; animation: rotate-text 8s linear infinite; }
+
+
+.circular:hover { transform: rotate(-6deg) scale(1.03); }
+
+
+/* accessibility focus */
+.circular:focus { outline: 3px solid rgba(22,219,101,0.12); outline-offset:4px }
+
+
+@keyframes borderGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(16, 255, 128, 0.2),
+                inset 0 0 30px rgba(16, 255, 128, 0.1);
+    border-color: rgba(16, 255, 128, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(16, 255, 128, 0.4),
+                inset 0 0 50px rgba(16, 255, 128, 0.2);
+    border-color: rgba(16, 255, 128, 0.8);
+  }
+}
+
+.animate-borderGlow {
+  animation: borderGlow 3s ease-in-out infinite;
+}

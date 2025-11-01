@@ -1,0 +1,131 @@
+/* =========================================================
+   Buttons.css — Scoped Animations for JoinButton & AwesomeButton
+   ========================================================= */
+
+/* ---------- General Utility Animations ---------- */
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 8px rgba(22, 219, 101, 0.3), 0 0 20px rgba(5, 140, 66, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(22, 219, 101, 0.6), 0 0 32px rgba(5, 140, 66, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(22, 219, 101, 0.3), 0 0 20px rgba(5, 140, 66, 0.1);
+  }
+}
+
+@keyframes rotateText {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   JOIN BUTTON — Neon Edge Button with Hover Glow
+   ========================================================= */
+
+.join-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  border: 2px solid #16DB65;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #058C42, #16DB65);
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.join-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #16DB65, #058C42, #04471C);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 0;
+}
+
+.join-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.join-btn:hover::before {
+  opacity: 1;
+}
+
+.join-btn:hover {
+  color: #fff;
+  animation: glowPulse 2s infinite ease-in-out;
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* =========================================================
+   AWESOME BUTTON — Circular Rotating Text Button
+   ========================================================= */
+
+.awesome-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  border: 2px solid #16DB65;
+  background-color: transparent;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.awesome-btn:hover {
+  background-color: #16DB65;
+  color: #020202;
+  transform: scale(1.1);
+}
+
+.awesome-btn .circle-text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: rotateText 8s linear infinite;
+}
+
+.awesome-btn .circle-text span {
+  position: absolute;
+  color: #16DB65;
+  font-size: 0.75rem;
+  transform-origin: center;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.awesome-btn:hover .circle-text span {
+  color: #020202;
+}
+
+/* =========================================================
+   Accessibility + Mobile Fixes
+   ========================================================= */
+
+.join-btn:focus-visible,
+.awesome-btn:focus-visible {
+  outline: 2px solid #16DB65;
+  outline-offset: 4px;
+}
