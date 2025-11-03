@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import StairLoader from "@/components/StairLoader";
+import LenisProvider from "./providers/LenisProvider";
 // import {
 // 	Navbar,
 // 	NavBody,
@@ -48,7 +49,7 @@ export default function RootLayout({
                   <NavbarButton href="#" variant="dark">Get started</NavbarButton>
                 </NavBody>
               </Navbar> */}
-        {children}
+        <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
   );

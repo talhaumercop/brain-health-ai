@@ -53,5 +53,7 @@ model Chat {
   answer     String   // AI response
   zone String?
   score Int?
+  motivation_closing String?
+  mindset_fix String?
   createdAt  DateTime @default(now())
 }
